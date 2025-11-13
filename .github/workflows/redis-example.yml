@@ -5,6 +5,7 @@ on:
 jobs:
   redis-test:
     runs-on: ubuntu-latest
+    container: ubuntu:22.04   # 👈 jobul tău rulează într-un container
 
     services:
       redis:
@@ -21,9 +22,9 @@ jobs:
       - uses: actions/checkout@v5
 
       - name: Install redis-cli
-        run: sudo apt-get update && sudo apt-get install -y redis-tools
+        run: apt-get update && apt-get install -y redis-tools
 
-      - name: Wait for Redis to be healthy
+      - name: Wait for Redis
         run: |
           for i in {1..10}; do
             if redis-cli -h redis ping; then
@@ -34,6 +35,3 @@ jobs:
             sleep 3
           done
           echo "❌ Redis did not respond in time" && exit 1
-
-      - name: Test Redis connection
-        run: redis-cli -h redis ping
