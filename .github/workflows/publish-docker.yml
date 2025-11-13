@@ -29,6 +29,7 @@ jobs:
           images: nubalau/aciit_lab2
 
       - name: Build and push Docker image
+        id: push     # <── am adăugat ID aici
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -40,5 +41,5 @@ jobs:
         uses: actions/attest-build-provenance@v3
         with:
           subject-name: index.docker.io/nubalau/aciit_lab2
-          subject-digest: ${{ steps.push.outputs.digest }}
+          subject-digest: ${{ steps.push.outputs.digest }}   # <── acum are de unde să ia digestul
           push-to-registry: true
