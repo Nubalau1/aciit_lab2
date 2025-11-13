@@ -1,0 +1,31 @@
+name: Node CI with Artifacts
+
+on:
+  workflow_dispatch:  # îl poți rula manual din tab-ul Actions
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Create some example build files
+        run: |
+          mkdir -p dist output/test
+          echo "Build complete ✅" > dist/build-info.txt
+          echo "<h1>Coverage 90%</h1>" > output/test/code-coverage.html
+
+      - name: Upload dist directory (build artifacts)
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-folder
+          path: |
+            dist
+            !dist/**/*.md  # exclude fișiere markdown
+
+      - name: Upload test report
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-coverage
+          path: output/test/code-coverage.html
