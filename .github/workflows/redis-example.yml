@@ -1,0 +1,25 @@
+name: Redis Service Example
+
+on:
+  workflow_dispatch:  # îl poți rula manual
+
+jobs:
+  test-with-redis:
+    runs-on: ubuntu-latest
+
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379  # mapează portul redis
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Test Redis connection
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y redis-tools
+          # Verificăm dacă serviciul Redis răspunde
+          redis-cli -h redis ping
