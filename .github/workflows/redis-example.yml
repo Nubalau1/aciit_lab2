@@ -5,7 +5,7 @@ on:
 jobs:
   redis-test:
     runs-on: ubuntu-latest
-    container: ubuntu:22.04   # 👈 jobul tău rulează într-un container
+    container: ubuntu:22.04   
 
     services:
       redis:
