@@ -1,0 +1,19 @@
+name: Open new issue
+on: workflow_dispatch  # Poți rula manual din tab-ul "Actions"
+
+jobs:
+  open-issue:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+
+    steps:
+      - name: Create new issue using GitHub CLI
+        run: |
+          gh issue create \
+            --repo ${{ github.repository }} \
+            --title "Issue created via GITHUB_TOKEN" \
+            --body "This issue was automatically created by a workflow run."
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
