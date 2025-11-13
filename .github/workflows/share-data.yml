@@ -1,0 +1,43 @@
+name: Share data between jobs
+
+on:
+  workflow_dispatch:
+
+jobs:
+  job_1:
+    name: Add 3 and 7
+    runs-on: ubuntu-latest
+    steps:
+      - run: expr 3 + 7 > math-homework.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: homework_pre
+          path: math-homework.txt
+
+  job_2:
+    name: Multiply by 9
+    needs: job_1
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          name: homework_pre
+      - run: |
+          value=$(cat math-homework.txt)
+          expr $value \* 9 > math-homework.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: homework_final
+          path: math-homework.txt
+
+  job_3:
+    name: Display results
+    needs: job_2
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          name: homework_final
+      - run: |
+          value=$(cat math-homework.txt)
+          echo "✅ The result is $value"
